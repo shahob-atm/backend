@@ -8,6 +8,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.resource.PathResourceResolver;
 import org.springframework.web.servlet.resource.ResourceResolverChain;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        serveStaticResources(registry, "/", "classpath:/static/");
+        serveStaticResources(registry, "/home", "classpath:/static/");
     }
 
     /**
@@ -67,5 +68,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
             Resource resource = super.resolveResource(request, requestPath, locations, chain);
             return nonNull(resource) ? resource : super.resolveResource(request, "/index.html", locations, chain);
         }
+    }
+
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/home").setViewName("forward:/index.html");
     }
 }
