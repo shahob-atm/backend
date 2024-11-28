@@ -18,13 +18,17 @@ import static java.util.Objects.nonNull;
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 
+    /**
+     * Configure CORS settings to allow cross-origin requests.
+     */
+
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**").allowedOrigins("*").allowedMethods("*").allowedHeaders("*");
     }
 
     /**
-     * Configure static resource handlers and serve the SPA's index.html for unmatched routes.
+     * Configure static resource handlers for specific routes.
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -35,28 +39,24 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 "/register", "classpath:/static/"
         );
 
-        routes.forEach((endpoint, location) -> serveStaticResources(registry, endpoint, location));
-    }
-
-    /**
-     * Helper method to configure resource handlers for a specific endpoint and location.
-     */
-    private void serveStaticResources(ResourceHandlerRegistry registry, String endpoint, String location) {
-        registry.addResourceHandler(formatEndpointPatterns(endpoint))
-                .addResourceLocations(formatLocation(location))
-                .resourceChain(true) // Enable resource chain for caching in production
-                .addResolver(new SpaResourceResolver());
+        // Dynamically configure resource handlers for each route
+        routes.forEach((endpoint, location) -> {
+            registry.addResourceHandler(formatEndpointPatterns(endpoint))
+                    .addResourceLocations(formatLocation(location))
+                    .resourceChain(true)
+                    .addResolver(new SpaResourceResolver());
+        });
     }
 
     /**
      * Format endpoint patterns for consistent matching.
      */
     private String[] formatEndpointPatterns(String endpoint) {
-        if (endpoint.endsWith("/")) {
-            return new String[]{endpoint.substring(0, endpoint.length() - 1), endpoint, endpoint + ""};
-        } else {
-            return new String[]{endpoint, endpoint + "/", endpoint + "/"};
-        }
+        return new String[]{
+                endpoint.endsWith("/") ? endpoint.substring(0, endpoint.length() - 1) : endpoint,
+                endpoint.endsWith("/") ? endpoint : endpoint + "/",
+                endpoint + "/"
+        };
     }
 
     /**
@@ -67,7 +67,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     }
 
     /**
-     * Custom resource resolver to fallback to index.html for SPA routing.
+     * Custom resource resolver to fallback to index.html for unmatched routes (SPA support).
      */
     private static class SpaResourceResolver extends PathResourceResolver {
         @Override
@@ -78,9 +78,14 @@ public class WebMvcConfig implements WebMvcConfigurer {
         }
     }
 
+    /**
+     * Configure view controllers for unmatched routes to route to index.html.
+     */
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        // Fallbackni umumlashtirish
-        registry.addViewController("/{path:^(?!api$).*$}/**").setViewName("forward:/index.html");
+        registry.addViewController("/{spring:[a-zA-Z0-9-_]+}")
+                .setViewName("forward:/index.html");
+        registry.addViewController("/**/{spring:[a-zA-Z0-9-_]+}")
+                .setViewName("forward:/index.html");
     }
 }
