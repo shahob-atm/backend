@@ -11,6 +11,7 @@ import org.springframework.web.servlet.resource.ResourceResolverChain;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 
 import java.util.List;
+import java.util.Map;
 
 import static java.util.Objects.nonNull;
 
@@ -27,7 +28,14 @@ public class WebMvcConfig implements WebMvcConfigurer {
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        serveStaticResources(registry, "/home", "classpath:/static/");
+        Map<String, String> routes = Map.of(
+                "/order", "classpath:/static/order/",
+                "/home", "classpath:/static/home/",
+                "/login", "classpath:/static/login/",
+                "/register", "classpath:/static/register/",
+        );
+
+        routes.forEach((endpoint, location) -> serveStaticResources(registry, endpoint, location));
     }
 
     /**
@@ -72,6 +80,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/home").setViewName("forward:/index.html");
+        // Fallbackni umumlashtirish
+        registry.addViewController("/{path:^(?!api$).*$}/**").setViewName("forward:/index.html");
     }
 }
