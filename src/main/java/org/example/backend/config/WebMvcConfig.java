@@ -16,19 +16,9 @@ import static java.util.Objects.nonNull;
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 
-    private static final String[] ALLOWED_METHODS = {"GET", "POST", "PUT", "DELETE", "OPTIONS"};
-    private static final String[] ALLOWED_HEADERS = {"Authorization", "Content-Type", "Accept", "X-Requested-With"};
-
-    /**
-     * Configure CORS to allow cross-origin requests from any source.
-     */
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedOrigins("*")
-                .allowedMethods(ALLOWED_METHODS)
-                .allowedHeaders(ALLOWED_HEADERS)
-                .allowCredentials(true);
+        registry.addMapping("/**").allowedOrigins("*").allowedMethods("*").allowedHeaders("*");
     }
 
     /**
