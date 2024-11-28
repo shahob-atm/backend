@@ -39,7 +39,7 @@ public class SecurityConfig{
                                 .requestMatchers(HttpMethod.GET, "api/category").permitAll()
                                 .requestMatchers(HttpMethod.GET, "api/food").permitAll()
                                 .requestMatchers(HttpMethod.GET, "api/post").permitAll()
-                                .anyRequest().authenticated()).addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class);
+                                .anyRequest().permitAll());
         return http.build();
     }
 
