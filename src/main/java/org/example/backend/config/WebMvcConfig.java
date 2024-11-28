@@ -32,7 +32,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 "/order", "classpath:/static/order/",
                 "/home", "classpath:/static/home/",
                 "/login", "classpath:/static/login/",
-                "/register", "classpath:/static/register/",
+                "/register", "classpath:/static/register/"
         );
 
         routes.forEach((endpoint, location) -> serveStaticResources(registry, endpoint, location));
