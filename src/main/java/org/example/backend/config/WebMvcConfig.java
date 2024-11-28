@@ -21,7 +21,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/**")
-                .addResourceLocations("classpath:/static/"); // Statik fayllar joylashuvi
+                .addResourceLocations("classpath:/static/");
     }
 
     private void serveDirectory(ResourceHandlerRegistry registry, String endpoint, String location) {
