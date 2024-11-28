@@ -29,10 +29,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         Map<String, String> routes = Map.of(
-                "/order", "classpath:/static/order",
-                "/home", "classpath:/static/home",
-                "/login", "classpath:/static/login",
-                "/register", "classpath:/static/register"
+                "/order", "classpath:/static/",
+                "/home", "classpath:/static/",
+                "/login", "classpath:/static/",
+                "/register", "classpath:/static/"
         );
 
         routes.forEach((endpoint, location) -> serveStaticResources(registry, endpoint, location));
