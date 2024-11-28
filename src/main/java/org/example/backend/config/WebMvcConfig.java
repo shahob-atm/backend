@@ -30,7 +30,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .setViewName("forward:/index.html");
         registry.addViewController("/**/{spring:[a-zA-Z0-9-_]+}")
                 .setViewName("forward:/index.html");
-        registry.addViewController("/{spring:[a-zA-Z0-9-_]+}/**{spring:?!(\\.js|\\.css|\\.png|\\.jpg|\\.jpeg|\\.gif)$}")
+        registry.addViewController("/{spring:[a-zA-Z0-9-_]+}/**")
                 .setViewName("forward:/index.html");
     }
 
